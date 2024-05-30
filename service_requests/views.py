@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import ServiceRequest
 from .serializers import ServiceRequestSerializer
+from django.contrib.auth.models import User
+
 
 class ServiceRequestViewSet(viewsets.ModelViewSet):
     queryset = ServiceRequest.objects.all()
@@ -14,8 +16,10 @@ class ServiceRequestViewSet(viewsets.ModelViewSet):
         return ServiceRequest.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-
+        user = self.request.data.get('user')
+        if user:
+            user = User.objects.get(pk=user)
+            serializer.save(user=user)
+        else:
+            serializer.save(user=self.request.user)
 
