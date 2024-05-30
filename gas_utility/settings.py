@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'accounts',
     'service_requests',
     'support',
-    'drf_yasg'
  
    
  
